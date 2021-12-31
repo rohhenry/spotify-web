@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Login from "./Login";
 import Recommender from "./Recommender";
 import theme from "./theme";
+import CssBaseline from "@mui/material/CssBaseline";
 import "./App.css";
 import backend from "./backend";
 
@@ -19,6 +20,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       {token === "" ? (
         <Login />
       ) : (

@@ -1,6 +1,6 @@
 import { Switch, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/system";
+import { Button, Box } from "@mui/material";
 import SpotifyPlayer from "react-spotify-web-playback";
 import theme from "./theme";
 import InitialComponent from "./Initial";
@@ -13,7 +13,6 @@ function Recommender({ token, setToken, userId }) {
     <Box
       display="flex"
       flexDirection="column"
-      bgcolor={theme.palette.secondary.main}
       height="85vh"
       pt="10vh"
       pb="5vh"
@@ -37,17 +36,14 @@ function Recommender({ token, setToken, userId }) {
           mr="5vw"
         >
           <Box p="2vw">
-            <Typography variant="h3" color="primary">
-              Custom ML
-            </Typography>
+            <Typography variant="h3">Custom ML</Typography>
           </Box>
           <Box display="flex">
-            <Box
-              width="20vw"
-              height="20vh"
+            <Button
+              variant="contained"
+              fullWidth
               p="5vh"
               mr="1vw"
-              borderRadius={10}
               border={1}
               display="flex"
               alignItems={"center"}
@@ -60,23 +56,15 @@ function Recommender({ token, setToken, userId }) {
                     setRecommendation(new_recommendation)
                   )
               }
-              bgcolor={theme.palette.tertiary.main}
-              sx={{
-                "&:hover": { backgroundColor: theme.palette.tertiary.light },
-              }}
             >
-              <Typography color="primary" variant="h3">
-                Add
-              </Typography>
-            </Box>
-            <Box
-              width="20vw"
-              height="20vh"
+              <Typography variant="h3">Add</Typography>
+            </Button>
+            <Button
+              variant="outlined"
+              fullWidth
               ml="1vw"
               p="5vh"
-              borderRadius={10}
-              border={1}
-              borderColor="primary.main"
+              bgcolor="secondary.main"
               display="flex"
               flex={1}
               alignItems={"center"}
@@ -88,29 +76,20 @@ function Recommender({ token, setToken, userId }) {
                     setRecommendation(new_recommendation)
                   )
               }
-              bgcolor={theme.palette.secondary.main}
-              sx={{
-                "&:hover": { backgroundColor: theme.palette.secondary.light },
-              }}
             >
-              <Typography color="primary" variant="h3">
-                Skip
-              </Typography>
-            </Box>
+              <Typography variant="h3">Skip</Typography>
+            </Button>
           </Box>
           <Box
             height="20%"
             width="100%"
             display="flex"
-            border={1}
-            borderColor="primary.main"
+            bgcolor="secondary.main"
           >
             <Box flexGrow={1} m="1vh">
-              <Typography variant="h5" color={theme.palette.primary.main}>
-                Metrics
-              </Typography>
+              <Typography variant="h5">Metrics</Typography>
             </Box>
-            <Box borderRight={1} borderColor="primary.main"></Box>
+            <Box borderRight={1}></Box>
             <Box
               flexGrow={4}
               m="1vh"
@@ -118,15 +97,11 @@ function Recommender({ token, setToken, userId }) {
               flexDirection="column"
               justifyContent="space-between"
             >
-              <Typography variant="h5" color={theme.palette.primary.main}>
-                Controls
-              </Typography>
+              <Typography variant="h5">Controls</Typography>
               <Box display="flex">
                 <Box display="flex" flexDirection="column">
-                  <Switch color="tertiary" />
-                  <Typography variant="p" color={theme.palette.primary.main}>
-                    Popularity Heuristic
-                  </Typography>
+                  <Switch color="primary" />
+                  <Typography variant="p">Popularity Heuristic</Typography>
                 </Box>
               </Box>
             </Box>
@@ -134,9 +109,7 @@ function Recommender({ token, setToken, userId }) {
         </Box>
 
         <Box
-          bgcolor={theme.palette.secondary.main}
-          border={1}
-          borderColor="primary.main"
+          bgcolor="secondary.main"
           width="25%"
           display="flex"
           flexDirection="column"
@@ -151,11 +124,11 @@ function Recommender({ token, setToken, userId }) {
           >
             <Box display="flex" flexDirection="column" flexGrow="1">
               <Typography color="primary" variant="h5" align="center">
-                Saved Tracks
+                Added Tracks
               </Typography>
             </Box>
             <Box></Box>
-            <Box
+            <Button
               alignSelf="center"
               width="8vw"
               height="1vh"
@@ -165,19 +138,14 @@ function Recommender({ token, setToken, userId }) {
               display="flex"
               alignItems={"center"}
               justifyContent={"center"}
-              bgcolor={theme.palette.tertiary.main}
-              sx={{
-                "&:hover": { backgroundColor: theme.palette.tertiary.light },
-              }}
+              variant="contained"
             >
-              <Typography color="primary" variant="h5" align="center">
-                Export
-              </Typography>
-            </Box>
+              Export
+            </Button>
           </Box>
         </Box>
       </Box>
-      <Box border={1} borderColor="primary.main">
+      <Box height="10vh">
         <SpotifyPlayer
           key={recommendation.id}
           token={token}
@@ -185,7 +153,7 @@ function Recommender({ token, setToken, userId }) {
           autoPlay={true}
           styles={{
             activeColor: "#000",
-            bgColor: "#000",
+            bgColor: theme.palette.secondary.main,
             color: "#fff",
             loaderColor: "#000",
             sliderColor: "#fff",
@@ -194,7 +162,7 @@ function Recommender({ token, setToken, userId }) {
             sliderHeight: "1vh",
             trackArtistColor: "#ccc",
             trackNameColor: "#fff",
-            errorColor: "#fff",
+            errorColor: "#f00",
           }}
           callback={async (s) => {
             console.log(s);

@@ -18,22 +18,40 @@ const theme = createTheme({
     ].join(","),
   },
   palette: {
+    type: "light",
     primary: {
-      light: "#ffffff",
-      main: "#ffffff",
-      dark: "#19144",
-      contrastText: "#  ",
+      main: "#1DB954",
+      light: "#1ed760",
+      contrastText: "#ffffff",
+    },
+
+    background: {
+      default: "#000000",
+      paper: "#212121",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "#cbcbcb",
+      disabled: "#ffffff",
+      hint: "#ffffff",
     },
     secondary: {
-      main: "#191414",
-      light: "#242526",
+      main: "#212121",
+      light: "#535353",
+      dark: "#121212",
     },
-    tertiary: {
-      light: "#1ed760",
-      main: "#1DB954",
-      dark: "#ba000d",
-      contrastText: "#000",
-    },
+  },
+  components: {
+    // Name of the component
+    // MuiBox: {
+    //   styleOverrides: {
+    //     // Name of the slot
+    //     root: {
+    //       // Some CSS
+    //       fontSize: "1rem",
+    //     },
+    //   },
+    // },
   },
 });
 
