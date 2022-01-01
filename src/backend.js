@@ -1,12 +1,26 @@
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-const update = async (id, feedback) => {
+const update = async (userId, id, feedback) => {
   console.log("updating");
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id, feedback }),
+    body: JSON.stringify({ userId, id, feedback }),
   };
   const response = await fetch(`${BASE_URL}/update`, requestOptions);
+  if (response.status === 201) {
+    console.log("update succeeded");
+  }
+  return;
+};
+
+const recommend = async (userId) => {
+  console.log("fetching recommendation");
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId }),
+  };
+  const response = await fetch(`${BASE_URL}/recommend`, requestOptions);
   const new_recommendation = await response.json();
   console.log("new recommendation: ", new_recommendation.name);
   return new_recommendation;
@@ -56,4 +70,4 @@ const refreshToken = async (userId) => {
   return json.access_token;
 };
 console.log(process.env.NODE_ENV);
-export default { update, search, getToken, refreshToken };
+export default { update, recommend, search, getToken, refreshToken };

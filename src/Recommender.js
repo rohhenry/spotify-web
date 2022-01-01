@@ -9,6 +9,10 @@ import backend from "./backend";
 function Recommender({ token, setToken, userId }) {
   const [recommendation, setRecommendation] = useState(null);
 
+  const updateAndRecommend = async (feedback) => {
+    await backend.update(userId, recommendation.id, feedback);
+    const new_recommendation = backend.recommend(userId);
+  };
   return recommendation ? (
     <Box
       display="flex"
@@ -51,7 +55,7 @@ function Recommender({ token, setToken, userId }) {
               flex={1}
               onClick={() =>
                 backend
-                  .update(recommendation.id, 1)
+                  .update(userId, recommendation.id, 1)
                   .then((new_recommendation) =>
                     setRecommendation(new_recommendation)
                   )
@@ -71,7 +75,7 @@ function Recommender({ token, setToken, userId }) {
               justifyContent={"center"}
               onClick={() =>
                 backend
-                  .update(recommendation.id, -1)
+                  .update(userId, recommendation.id, -1)
                   .then((new_recommendation) =>
                     setRecommendation(new_recommendation)
                   )
@@ -172,7 +176,7 @@ function Recommender({ token, setToken, userId }) {
               s.isPlaying === false
             ) {
               backend
-                .update(recommendation.id, 1)
+                .update(userId, recommendation.id, 1)
                 .then((new_recommendation) =>
                   setRecommendation(new_recommendation)
                 );
@@ -188,7 +192,7 @@ function Recommender({ token, setToken, userId }) {
       </Box>
     </Box>
   ) : (
-    <InitialComponent setRecommendation={setRecommendation} />
+    <InitialComponent setRecommendation={setRecommendation} userId={userId} />
   );
 }
 

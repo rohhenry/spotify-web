@@ -7,11 +7,10 @@ import {
   Typography,
   Autocomplete,
 } from "@mui/material";
-import theme from "./theme";
 import backend from "./backend";
 import { debounce } from "lodash";
 
-const debouncedSearch = debounce(backend.search, 200);
+const debouncedSearch = debounce(backend.search, 1000);
 
 const SearchBox = ({ label, onClick }) => {
   let [search_string, setSearchString] = useState("");
@@ -68,7 +67,7 @@ const SearchBox = ({ label, onClick }) => {
   );
 };
 
-const InitialComponent = ({ setRecommendation }) => {
+const InitialComponent = ({ setRecommendation, userId }) => {
   const [tracks, setTracks] = useState([]);
   console.log(tracks);
   return (
@@ -128,12 +127,14 @@ const InitialComponent = ({ setRecommendation }) => {
               console.log("NEED TO INPUT ALL TRACKS");
             }
             const promises = [];
-            await backend.update(tracks[0].option.id, tracks[0].feedback);
-            await backend.update(tracks[1].option.id, tracks[1].feedback);
-            const recommendation = await backend.update(
-              tracks[2].option.id,
-              tracks[2].feedback
-            );
+            tracks.map((track) => {
+              promises.push(
+                backend.update(userId, track.option.id, track.feedback)
+              );
+            });
+            await Promise.all(promises);
+
+            const recommendation = await backend.recommend(userId);
             setRecommendation(recommendation);
           }}
         >
