@@ -5,7 +5,7 @@ import Recommender from "./Recommender";
 import theme from "./theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import "./App.css";
-import backend from "./backend";
+import backend from "./server";
 
 function App() {
   const [token, setToken] = useState("");

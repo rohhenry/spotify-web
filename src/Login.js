@@ -35,17 +35,24 @@ function Login() {
               <Typography variant="h4">Features: </Typography>
               <Typography style={{ wordWrap: "break-word" }}>
                 song suggestions hyperparameter tuning importing / exporting
-                playlists This is a spotify track recommendation webapp. You
-                need a spotify premium account to use.
+                playlists This is a spotify track recommendation webapp.
               </Typography>
             </Paper>
           </Box>
-          <Box>
+          <Box mb="2vh">
             <Paper>
               <Typography variant="h4">Tech Used: </Typography>
               <Typography style={{ wordWrap: "break-word" }}>
                 Frontend: JavaScript, react, material ui, github pages Backend:
                 python, sklearn, numpy, flask, heroku
+              </Typography>
+            </Paper>
+          </Box>
+          <Box>
+            <Paper>
+              <Typography variant="h4">Features Under Developement </Typography>
+              <Typography style={{ wordWrap: "break-word" }}>
+                importing tracks, exporting tracks, server memory optimizations
               </Typography>
             </Paper>
           </Box>

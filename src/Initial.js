@@ -7,10 +7,10 @@ import {
   Typography,
   Autocomplete,
 } from "@mui/material";
-import backend from "./backend";
+import backend from "./server";
 import { debounce } from "lodash";
 
-const debouncedSearch = debounce(backend.search, 1000);
+const debouncedSearch = debounce(backend.search, 500);
 
 const SearchBox = ({ label, onClick }) => {
   let [search_string, setSearchString] = useState("");
@@ -74,29 +74,45 @@ const InitialComponent = ({ setRecommendation, userId }) => {
     <Box
       display="flex"
       flexDirection="column"
-      alignContent="center"
+      alignItems="center"
+      justifyContent="center"
       width="100vw"
       height="100vh"
     >
-      <Box display="flex" alignContent="center" justifyContent={"center"}>
+      <Box p="5vw">
+        <Typography variant="h3" align="center">
+          Feed Me Some Data First
+        </Typography>
+      </Box>
+      <Box
+        width="60vw"
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        alignSelf="center"
+      >
         <Box display="flex" flexDirection="column">
           <Paper>
             <Box display="flex" flexDirection="column">
               <Typography variant="h4">Enter Two Tracks you like: </Typography>
-              <SearchBox
-                label="track 1"
-                onClick={(option) => {
-                  tracks[0] = { option, feedback: 1 };
-                  setTracks([...tracks]);
-                }}
-              />
-              <SearchBox
-                label="track 2"
-                onClick={(option) => {
-                  tracks[1] = { option, feedback: 1 };
-                  setTracks([...tracks]);
-                }}
-              />
+              <Box my="5vh">
+                <SearchBox
+                  label="track 1"
+                  onClick={(option) => {
+                    tracks[0] = { option, feedback: 1 };
+                    setTracks([...tracks]);
+                  }}
+                />
+              </Box>
+              <Box my="5vh">
+                <SearchBox
+                  label="track 2"
+                  onClick={(option) => {
+                    tracks[1] = { option, feedback: 1 };
+                    setTracks([...tracks]);
+                  }}
+                />
+              </Box>
             </Box>
             <Box>
               <Typography variant="h4">And One Track You Dont:</Typography>
@@ -125,6 +141,8 @@ const InitialComponent = ({ setRecommendation, userId }) => {
           onClick={async () => {
             if (!tracks.every((v) => v)) {
               console.log("NEED TO INPUT ALL TRACKS");
+              const recommendation = await backend.recommend(userId);
+              setRecommendation(recommendation);
             }
             const promises = [];
             tracks.map((track) => {
@@ -134,8 +152,10 @@ const InitialComponent = ({ setRecommendation, userId }) => {
             });
             await Promise.all(promises);
 
-            const recommendation = await backend.recommend(userId);
-            setRecommendation(recommendation);
+            const new_recommendation_data = await backend.recommend(userId);
+            const new_recommendation =
+              new_recommendation_data["recommendation"];
+            setRecommendation(new_recommendation);
           }}
         >
           Start
