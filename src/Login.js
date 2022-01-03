@@ -24,9 +24,15 @@ function Login() {
           <Box mb="2vh">
             <Paper>
               <Typography variant="h4">About: </Typography>
-              <Typography style={{ wordWrap: "break-word" }}>
-                This is a spotify track recommendation webapp. You need a
-                spotify premium account to use.
+              <Typography paragraph>
+                {`This is a spotify track recommendation webapp. 
+               
+               This app tracks
+                your preferences and helps you create new playlists. The goal is
+                to introduce you to new, diverse, songs. Unlike traditional
+                recommendation algorithms which relies heavily on collaborative
+                filtering, this algorithm is purely content based. You will need
+                a spotify premium account to use.`}
               </Typography>
             </Paper>
           </Box>
@@ -59,6 +65,7 @@ function Login() {
         </Box>
 
         <Button
+          fullWidth
           variant="contained"
           color="primary"
           href={`${process.env.REACT_APP_BACKEND_URL}/auth/login`}

@@ -1,10 +1,11 @@
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
-const update = async (userId, id, feedback) => {
+const update = async (userId, id, feedback, ids = []) => {
   console.log("updating");
+  console.log(id);
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, id, feedback }),
+    body: JSON.stringify({ userId, id, feedback, ids }),
   };
   const response = await fetch(`${BASE_URL}/update`, requestOptions);
   if (response.status === 201) {
@@ -22,7 +23,7 @@ const recommend = async (userId) => {
   };
   const response = await fetch(`${BASE_URL}/recommend`, requestOptions);
   const new_recommendation = await response.json();
-  console.log("new recommendation: ", new_recommendation.name);
+  console.log("new recommendation: ", new_recommendation);
   return new_recommendation;
 };
 

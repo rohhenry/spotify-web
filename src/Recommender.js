@@ -141,7 +141,7 @@ function Recommender({ token, setToken, userId }) {
             activeColor: "#000",
             bgColor: theme.palette.secondary.main,
             color: "#fff",
-            loaderColor: "#000",
+            loaderColor: "#fff",
             sliderColor: "#fff",
             sliderHandleColor: "fff",
             sliderTrackColor: theme.palette.secondary.light,
@@ -171,6 +171,7 @@ function Recommender({ token, setToken, userId }) {
     </Box>
   ) : (
     <InitialComponent
+      token={token}
       setAddlist={setAddlist}
       setRecommendation={setRecommendation}
       userId={userId}

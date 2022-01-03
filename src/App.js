@@ -6,6 +6,7 @@ import theme from "./theme";
 import CssBaseline from "@mui/material/CssBaseline";
 import "./App.css";
 import backend from "./server";
+import spotifyApi from "./spotify";
 
 function App() {
   const [token, setToken] = useState("");
@@ -15,7 +16,14 @@ function App() {
 
   console.log("userId: ", userId);
   useEffect(() => {
-    userId && backend.getToken(userId).then((token) => setToken(token));
+    userId &&
+      backend.getToken(userId).then((token) => {
+        console.log(token);
+        if (token) {
+          spotifyApi.setAccessToken(token);
+          setToken(token);
+        }
+      });
   }, [userId]);
 
   return (
@@ -24,7 +32,9 @@ function App() {
       {token === "" ? (
         <Login />
       ) : (
-        <Recommender userId={userId} token={token} setToken={setToken} />
+        token && (
+          <Recommender userId={userId} token={token} setToken={setToken} />
+        )
       )}
     </ThemeProvider>
   );

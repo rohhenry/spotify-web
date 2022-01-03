@@ -9,55 +9,75 @@ import {
 } from "@mui/material";
 import backend from "./server";
 import { debounce } from "lodash";
+import { Playlists } from "./Components";
 
 const debouncedSearch = debounce(backend.search, 500);
 
 const SearchBox = ({ label, onClick }) => {
   let [search_string, setSearchString] = useState("");
   const [search_results, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(null);
+  const [open, setOpen] = useState(true);
   const query = async (search_string) => {
     console.log(search_string);
     setSearchString(search_string);
+    setSearchResults([]);
     if (search_string === "") {
-      setSearchResults([]);
       return;
     }
+    setLoading(true);
     await debouncedSearch(search_string, (res) => {
       console.log(res);
       setSearchResults(res);
+      setLoading(false);
     });
   };
   return (
     <Autocomplete
       value={value}
       onChange={(a, b) => {
-        console.log("wieo");
+        console.log("changes");
       }}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       options={search_results}
       inputValue={search_string}
+      open={search_string.length > 0 && open}
       onInputChange={(e, v) => {
         query(v);
       }}
-      getOptionLabel={(option) => option.name}
+      onOpen={() => {
+        setOpen(true);
+      }}
+      onClose={() => {
+        setOpen(false);
+      }}
+      loading={loading}
+      loadingText="Loading... (heroku is slow)"
       noOptionsText="Track Not Found"
       filterOptions={(x) => x}
+      autoComplete
+      fullWidth
+      getOptionLabel={(option) => option.name}
       renderInput={(params) => <TextField {...params} label={label} />}
       renderOption={(props, option) => {
         return (
-          <Box>
+          <Box key={option.id} width="100%">
             <Button
               variant="text"
-              color="primary"
               onClick={() => {
                 setValue(option);
                 onClick(option);
+                setOpen(false);
               }}
             >
               <Box flexDirection="column">
-                <Typography>{option.name}</Typography>
-                <Typography>{option.artists}</Typography>
+                <Typography color="text.primary" textAlign="left">
+                  {option.name}
+                </Typography>
+                <Typography color="text.secondary" textAlign="left">
+                  {option.artists.replace(/[\[\]']/g, "")}
+                </Typography>
               </Box>
             </Button>
           </Box>
@@ -69,6 +89,7 @@ const SearchBox = ({ label, onClick }) => {
 
 const InitialComponent = ({ setRecommendation, userId }) => {
   const [tracks, setTracks] = useState([]);
+
   console.log(tracks);
   return (
     <Box
@@ -85,17 +106,16 @@ const InitialComponent = ({ setRecommendation, userId }) => {
         </Typography>
       </Box>
       <Box
-        width="60vw"
+        width="80vw"
         display="flex"
         alignItems="center"
-        justifyContent="space-between"
-        alignSelf="center"
+        justifyContent="space-around"
       >
-        <Box display="flex" flexDirection="column">
-          <Paper>
+        <Paper>
+          <Box display="flex" flexDirection="column" p="2vw" width="30vw">
             <Box display="flex" flexDirection="column">
-              <Typography variant="h4">Enter Two Tracks you like: </Typography>
-              <Box my="5vh">
+              <Typography variant="h5">Enter Two Tracks you like: </Typography>
+              <Box mt="2vh">
                 <SearchBox
                   label="track 1"
                   onClick={(option) => {
@@ -104,7 +124,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
                   }}
                 />
               </Box>
-              <Box my="5vh">
+              <Box my="2vh">
                 <SearchBox
                   label="track 2"
                   onClick={(option) => {
@@ -115,25 +135,24 @@ const InitialComponent = ({ setRecommendation, userId }) => {
               </Box>
             </Box>
             <Box>
-              <Typography variant="h4">And One Track You Dont:</Typography>
-              <SearchBox
-                label="track 1"
-                onClick={(option) => {
-                  tracks[2] = { option, feedback: -1 };
-                  setTracks([...tracks]);
-                }}
-              />
+              <Typography variant="h5">And One Track You Dont:</Typography>
+              <Box my="2vh">
+                <SearchBox
+                  label="track 1"
+                  onClick={(option) => {
+                    tracks[2] = { option, feedback: -1 };
+                    setTracks([...tracks]);
+                  }}
+                />
+              </Box>
             </Box>
-          </Paper>
-        </Box>
-        <Box>
+          </Box>
+        </Paper>
+
+        <Box m="10vw">
           <Typography variant="h3">Or</Typography>
         </Box>
-        <Box>
-          <Button variant="contained">
-            Import A Playlist (NOT AVAILABLE YET)
-          </Button>
-        </Box>
+        <Playlists userId={userId} />
       </Box>
       <Box alignSelf="center">
         <Button
@@ -145,7 +164,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
               setRecommendation(recommendation);
             }
             const promises = [];
-            tracks.map((track) => {
+            tracks.forEach((track) => {
               promises.push(
                 backend.update(userId, track.option.id, track.feedback)
               );
@@ -158,7 +177,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
             setRecommendation(new_recommendation);
           }}
         >
-          Start
+          Let's Go
         </Button>
       </Box>
     </Box>
