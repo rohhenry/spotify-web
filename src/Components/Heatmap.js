@@ -4,7 +4,7 @@ import { max, min } from "lodash";
 
 const Square = ({ label, heat, scalingFunction, space }) => {
   const [hover, setHover] = useState(false);
-  const size = 3;
+  const size = 2.5;
   return (
     <div
       style={{
@@ -14,8 +14,8 @@ const Square = ({ label, heat, scalingFunction, space }) => {
         borderWidth: "0.3rem",
         marginBottom: `${space}rem`,
         marginTop: `${space}rem`,
-        height: `${size}rem`,
-        width: `${size}rem`,
+        height: `${size}vw`,
+        width: `${size}vw`,
         backgroundColor: `rgba(30, 215, 96, ${scalingFunction(heat)})`,
       }}
       onMouseEnter={() => {

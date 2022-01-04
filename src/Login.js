@@ -53,29 +53,46 @@ function Login({ loading, setLoading }) {
         </Box>
       </Box>
 
-      <Box display="flex" justifyContent="space-evenly">
-        <Box display="flex" flexDirection="column">
-          <Box mb="2vh">
-            <Paper>
-              <Typography variant="h4">Demo: </Typography>
+      {loading ? (
+        <Box
+          display="flex"
+          flexDirection="column"
+          flexGrow={1}
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
+          <CircularProgress size="5vw" justifySelf="center" />
+          <Box display="flex" height="4vh" />
+          <Typography variant="h5">Logging In</Typography>
+          <Typography color="text.secondary">
+            Heroku containers may take up to 10 seconds to wake up
+          </Typography>
+        </Box>
+      ) : (
+        <Box display="flex" justifyContent="space-evenly">
+          <Box display="flex" flexDirection="column">
+            <Box mb="2vh">
+              <Paper>
+                <Typography variant="h4">Demo: </Typography>
 
-              <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                frameborder="0"
-                allow="autoplay; encrypted-media"
-                allowfullscreen
-                title="video"
-                height="300"
-                width="1200"
-              />
-            </Paper>
-          </Box>
+                <iframe
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  frameborder="0"
+                  allow="autoplay; encrypted-media"
+                  allowfullscreen
+                  title="video"
+                  height="300"
+                  width="1200"
+                />
+              </Paper>
+            </Box>
 
-          <Box mb="2vh">
-            <Paper>
-              <Typography variant="h4">About: </Typography>
-              <Typography paragraph>
-                {`
+            <Box mb="2vh">
+              <Paper>
+                <Typography variant="h4">About: </Typography>
+                <Typography paragraph>
+                  {`
                 This app takes your preferences and helps you create new playlists with machine learning. 
                 The goal is to introduce you to new, diverse, songs. Unlike traditional
                 recommendation algorithms which relies heavily on collaborative
@@ -85,41 +102,41 @@ function Login({ loading, setLoading }) {
                 You can erase your data at anytime
                 
                 For better performance clone the repo and run this app locally`}
-              </Typography>
-            </Paper>
+                </Typography>
+              </Paper>
+            </Box>
+            <Box mb="2vh">
+              <Paper>
+                <Typography variant="h4">Features: </Typography>
+                <Typography style={{ wordWrap: "break-word" }}>
+                  song suggestions hyperparameter tuning importing / exporting
+                  playlists This is a spotify track recommendation webapp.
+                </Typography>
+              </Paper>
+            </Box>
+            <Box mb="2vh">
+              <Paper>
+                <Typography variant="h4">Tech Stack: </Typography>
+                <Typography style={{ wordWrap: "break-word" }}>
+                  Frontend: JavaScript, react, material ui github pages Backend:
+                  python, flask, heroku, google firestore Tools: sklearn, numpy,
+                  pandas, spotify api
+                </Typography>
+              </Paper>
+            </Box>
+            <Box>
+              <Paper>
+                <Typography variant="h4">
+                  Features Under Developement{" "}
+                </Typography>
+                <Typography style={{ wordWrap: "break-word" }}>
+                  importing tracks, exporting tracks, server optimizations, more
+                  hyperparameter controls, allow non-spotify users to use
+                </Typography>
+              </Paper>
+            </Box>
           </Box>
-          <Box mb="2vh">
-            <Paper>
-              <Typography variant="h4">Features: </Typography>
-              <Typography style={{ wordWrap: "break-word" }}>
-                song suggestions hyperparameter tuning importing / exporting
-                playlists This is a spotify track recommendation webapp.
-              </Typography>
-            </Paper>
-          </Box>
-          <Box mb="2vh">
-            <Paper>
-              <Typography variant="h4">Tech Stack: </Typography>
-              <Typography style={{ wordWrap: "break-word" }}>
-                Frontend: JavaScript, react, material ui, github pages Backend:
-                python, sklearn, numpy, flask, heroku
-              </Typography>
-            </Paper>
-          </Box>
-          <Box>
-            <Paper>
-              <Typography variant="h4">Features Under Developement </Typography>
-              <Typography style={{ wordWrap: "break-word" }}>
-                importing tracks, exporting tracks, server optimizations, more
-                hyperparameter controls, allow non-spotify users to use
-              </Typography>
-            </Paper>
-          </Box>
-        </Box>
 
-        {loading ? (
-          <CircularProgress />
-        ) : (
           <Button
             fullWidth
             variant="contained"
@@ -132,8 +149,8 @@ function Login({ loading, setLoading }) {
           >
             Login with Spotify
           </Button>
-        )}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 }

@@ -127,7 +127,10 @@ const InitialComponent = ({ setRecommendation, userId }) => {
     >
       <Box p="5vw">
         <Typography variant="h3" align="center">
-          {` > feed me some data`}
+          {`Welcome! `}
+        </Typography>
+        <Typography variant="h4" align="center" color="secondary.light">
+          feed me some data to start
         </Typography>
       </Box>
       <Box
@@ -179,7 +182,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
         <Box m="10vw">
           <Typography variant="h3">or</Typography>
         </Box>
-        <Box width="30vw" p="2vw">
+        <Box width="30vw">
           <Playlists
             userId={userId}
             selectedPlaylist={selectedPlaylist}

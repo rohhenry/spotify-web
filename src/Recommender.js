@@ -57,22 +57,20 @@ function Recommender({ token, setToken, userId }) {
         >
           <Box flexGrow={1} m="1vh">
             <Typography variant="h5">Metrics</Typography>
+            <Typography>n: {42}</Typography>
             <Typography>score: {metrics.score}</Typography>
             <Typography>mae: {metrics.mae}</Typography>
           </Box>
           <Box borderRight={1}></Box>
-          <Box
-            flexGrow={4}
-            display="flex"
-            flexDirection="column"
-            justifyContent="space-between"
-          >
+          <Box flexGrow={4} display="flex" flexDirection="column">
             <Typography variant="h5">Controls</Typography>
-            <Box display="flex">
-              <Box display="flex" flexDirection="column">
-                <Switch color="primary" />
-                <Typography variant="p">Popularity Heuristic</Typography>
-              </Box>
+            <Box display="flex" alignItems="center">
+              <Typography variant="p">Popularity Heuristic</Typography>
+              <Switch color="primary" />
+            </Box>
+            <Box display="flex" alignItems="center">
+              <Typography variant="p">Regularization (L2)</Typography>
+              <Switch color="primary" />
             </Box>
           </Box>
         </Box>
@@ -89,7 +87,7 @@ function Recommender({ token, setToken, userId }) {
             <CircularProgress size="5vw" justifySelf="center" />
             <Box display="flex" height="4vh" />
             <Typography variant="h5">Crunching Numbers</Typography>
-            <Typography color="text.secondary">Heroku is slow</Typography>
+            <Typography color="text.secondary">and thinking hard</Typography>
           </Box>
         ) : (
           <Box
