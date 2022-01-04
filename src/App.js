@@ -13,28 +13,30 @@ function App() {
   const queryParams = new URLSearchParams(window.location.search);
   const uid = queryParams.get("userId");
   const [userId, _] = useState(uid);
+  const [loading, setLoading] = useState(false);
 
   console.log("userId: ", userId);
   useEffect(() => {
-    userId &&
+    if (userId) {
+      setLoading(true);
       backend.getToken(userId).then((token) => {
         console.log(token);
         if (token) {
           spotifyApi.setAccessToken(token);
           setToken(token);
         }
+        setLoading(false);
       });
+    }
   }, [userId]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {token === "" ? (
-        <Login />
+      {!token ? (
+        <Login loading={loading} setLoading={setLoading} />
       ) : (
-        token && (
-          <Recommender userId={userId} token={token} setToken={setToken} />
-        )
+        <Recommender userId={userId} token={token} setToken={setToken} />
       )}
     </ThemeProvider>
   );

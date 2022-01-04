@@ -12,23 +12,22 @@ import {
 const Addlist = ({ tracks }) => {
   return (
     <Box
-      bgcolor="secondary.main"
-      width="25%"
+      bgcolor="background.default"
+      width="20%"
       display="flex"
       flexDirection="column"
-      maxHeight="60vh"
-      p={2}
+      pt="4vh"
+      px="2vh"
+      pb="2vh"
     >
       <Box display="flex" flexDirection="column" mb="10%">
-        <Typography color="primary" variant="h4" align="center">
-          Added Tracks
-        </Typography>
+        <Typography variant="h4">Added Tracks</Typography>
       </Box>
-      <Box flexGrow={1}>
-        <Paper sx={{ maxHeight: "100%", overflow: "auto" }} elevation={0}>
+      <Box flexGrow={1} sx={{ maxHeight: "100%", overflow: "auto" }} mb="2vh">
+        <Paper elevation={0}>
           <List>
             {tracks.map((track, i) => (
-              <ListItem>
+              <ListItem disablePadding>
                 <ListItemButton>
                   <Box display="flex" alignItems="center">
                     <Box width="2vw" mr="1vw">

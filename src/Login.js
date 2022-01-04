@@ -1,10 +1,10 @@
 import React from "react";
-import { Typography, useTheme } from "@mui/material";
+import { CircularProgress, Typography, useTheme } from "@mui/material";
 import { Box, Button, Paper } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 console.log(process.env.REACT_APP_BACKEND_URL);
-function Login() {
+function Login({ loading, setLoading }) {
   const theme = useTheme();
   return (
     <Box
@@ -111,20 +111,28 @@ function Login() {
               <Typography variant="h4">Features Under Developement </Typography>
               <Typography style={{ wordWrap: "break-word" }}>
                 importing tracks, exporting tracks, server optimizations, more
-                hyperparameter controls
+                hyperparameter controls, allow non-spotify users to use
               </Typography>
             </Paper>
           </Box>
         </Box>
 
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          href={`${process.env.REACT_APP_BACKEND_URL}/auth/login`}
-        >
-          Login with Spotify
-        </Button>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            // href={`${process.env.REACT_APP_BACKEND_URL}/auth/login`}
+            onClick={(event) => {
+              setLoading(true);
+              window.location.href = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
+            }}
+          >
+            Login with Spotify
+          </Button>
+        )}
       </Box>
     </Box>
   );

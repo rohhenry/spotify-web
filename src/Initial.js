@@ -109,7 +109,8 @@ const InitialComponent = ({ setRecommendation, userId }) => {
   const uploadTracks = async () => {
     const promises = [];
     tracks.forEach((track) => {
-      promises.push(server.update(userId, track.option.id, track.feedback));
+      track.option &&
+        promises.push(server.update(userId, track.option.id, track.feedback));
     });
     await Promise.all(promises);
   };
@@ -145,7 +146,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
                 <SearchBox
                   label="track 1"
                   onClick={(option) => {
-                    tracks[0] = { option, feedback: 1 };
+                    tracks[0] = { option: option, feedback: 1 };
                     setTracks([...tracks]);
                   }}
                 />
@@ -196,7 +197,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
             onClick={async () => {
               if (
                 !selectedPlaylist &&
-                (tracks.some((v) => !v) || tracks.length != 3)
+                (tracks.some((v) => !v) || tracks.length !== 3)
               ) {
                 console.log("NEED TO INPUT ALL TRACKS OR USE PLAYLIST");
                 return;
@@ -210,6 +211,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
               const new_recommendation_data = await server.recommend(userId);
               const new_recommendation =
                 new_recommendation_data["recommendation"];
+              new_recommendation.weights = new_recommendation_data.weights;
               setRecommendation(new_recommendation);
               setLoading(false);
             }}
