@@ -52,6 +52,20 @@ const theme = createTheme({
     //     },
     //   },
     // },
+    // MuiToggleButton: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: "primary",
+    //     },
+    //   },
+    // },
+    // MuiToggleButtonGroup: {
+    //   styleOverrides: {
+    //     root: {
+    //       color: "primary",
+    //     },
+    //   },
+    // },
   },
 });
 

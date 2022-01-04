@@ -6,12 +6,15 @@ import {
   TextField,
   Typography,
   Autocomplete,
+  CircularProgress,
 } from "@mui/material";
-import backend from "./server";
+import server from "./server";
+import spotifyApi from "./spotify";
+
 import { debounce } from "lodash";
 import { Playlists } from "./Components";
 
-const debouncedSearch = debounce(backend.search, 500);
+const debouncedSearch = debounce(server.search, 500);
 
 const SearchBox = ({ label, onClick }) => {
   let [search_string, setSearchString] = useState("");
@@ -62,25 +65,30 @@ const SearchBox = ({ label, onClick }) => {
       renderInput={(params) => <TextField {...params} label={label} />}
       renderOption={(props, option) => {
         return (
-          <Box key={option.id} width="100%">
-            <Button
-              variant="text"
-              onClick={() => {
-                setValue(option);
-                onClick(option);
-                setOpen(false);
-              }}
+          <Button
+            key={option.id}
+            fullWidth
+            variant="text"
+            onClick={() => {
+              setValue(option);
+              onClick(option);
+              setOpen(false);
+            }}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="start"
+              flexGrow={1}
             >
-              <Box flexDirection="column">
-                <Typography color="text.primary" textAlign="left">
-                  {option.name}
-                </Typography>
-                <Typography color="text.secondary" textAlign="left">
-                  {option.artists.replace(/[\[\]']/g, "")}
-                </Typography>
-              </Box>
-            </Button>
-          </Box>
+              <Typography color="text.primary" textAlign="left">
+                {option.name}
+              </Typography>
+              <Typography color="text.secondary" textAlign="left">
+                {option.artists.replace(/[\[\]']/g, "")}
+              </Typography>
+            </Box>
+          </Button>
         );
       }}
     />
@@ -89,6 +97,22 @@ const SearchBox = ({ label, onClick }) => {
 
 const InitialComponent = ({ setRecommendation, userId }) => {
   const [tracks, setTracks] = useState([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const uploadSelectedPlaylist = async () => {
+    const data = await spotifyApi.getPlaylist(selectedPlaylist.id);
+    const ids = data.tracks.items.map((item) => item.track.id);
+    await server.update(userId, "", "", ids);
+  };
+
+  const uploadTracks = async () => {
+    const promises = [];
+    tracks.forEach((track) => {
+      promises.push(server.update(userId, track.option.id, track.feedback));
+    });
+    await Promise.all(promises);
+  };
 
   console.log(tracks);
   return (
@@ -102,7 +126,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
     >
       <Box p="5vw">
         <Typography variant="h3" align="center">
-          Feed Me Some Data First
+          {` > feed me some data`}
         </Typography>
       </Box>
       <Box
@@ -114,7 +138,9 @@ const InitialComponent = ({ setRecommendation, userId }) => {
         <Paper>
           <Box display="flex" flexDirection="column" p="2vw" width="30vw">
             <Box display="flex" flexDirection="column">
-              <Typography variant="h5">Enter Two Tracks you like: </Typography>
+              <Typography variant="h5">
+                Search For Two Tracks You Like
+              </Typography>
               <Box mt="2vh">
                 <SearchBox
                   label="track 1"
@@ -135,7 +161,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
               </Box>
             </Box>
             <Box>
-              <Typography variant="h5">And One Track You Dont:</Typography>
+              <Typography variant="h5">And One Track You Don't</Typography>
               <Box my="2vh">
                 <SearchBox
                   label="track 1"
@@ -150,35 +176,47 @@ const InitialComponent = ({ setRecommendation, userId }) => {
         </Paper>
 
         <Box m="10vw">
-          <Typography variant="h3">Or</Typography>
+          <Typography variant="h3">or</Typography>
         </Box>
-        <Playlists userId={userId} />
+        <Box width="30vw" p="2vw">
+          <Playlists
+            userId={userId}
+            selectedPlaylist={selectedPlaylist}
+            setSelectedPlaylist={setSelectedPlaylist}
+          />
+        </Box>
       </Box>
       <Box alignSelf="center">
-        <Button
-          variant="contained"
-          onClick={async () => {
-            if (!tracks.every((v) => v)) {
-              console.log("NEED TO INPUT ALL TRACKS");
-              const recommendation = await backend.recommend(userId);
-              setRecommendation(recommendation);
-            }
-            const promises = [];
-            tracks.forEach((track) => {
-              promises.push(
-                backend.update(userId, track.option.id, track.feedback)
-              );
-            });
-            await Promise.all(promises);
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Button
+            variant="contained"
+            size="large"
+            onClick={async () => {
+              if (
+                !selectedPlaylist &&
+                (tracks.some((v) => !v) || tracks.length != 3)
+              ) {
+                console.log("NEED TO INPUT ALL TRACKS OR USE PLAYLIST");
+                return;
+              }
 
-            const new_recommendation_data = await backend.recommend(userId);
-            const new_recommendation =
-              new_recommendation_data["recommendation"];
-            setRecommendation(new_recommendation);
-          }}
-        >
-          Let's Go
-        </Button>
+              setLoading(true);
+
+              await uploadTracks();
+              selectedPlaylist && (await uploadSelectedPlaylist());
+
+              const new_recommendation_data = await server.recommend(userId);
+              const new_recommendation =
+                new_recommendation_data["recommendation"];
+              setRecommendation(new_recommendation);
+              setLoading(false);
+            }}
+          >
+            {`Let's Go`}
+          </Button>
+        )}
       </Box>
     </Box>
   );

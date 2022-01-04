@@ -29,7 +29,29 @@ const Addlist = ({ tracks }) => {
           <List>
             {tracks.map((track, i) => (
               <ListItem>
-                <ListItemButton>{i + 1 + ` ` + track.name}</ListItemButton>
+                <ListItemButton>
+                  <Box display="flex" alignItems="center">
+                    <Box width="2vw" mr="1vw">
+                      <Typography color="text.secondary" align="right">
+                        {i + 1}
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="start"
+                      flexGrow={1}
+                    >
+                      <Typography color="text.primary" textAlign="left">
+                        {track.name}
+                      </Typography>
+                      <Typography color="text.secondary" textAlign="left">
+                        {track.artists.replace(/[\[\]']/g, "")}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </ListItemButton>
               </ListItem>
             ))}
           </List>
