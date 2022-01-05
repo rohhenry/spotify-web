@@ -109,7 +109,7 @@ function Login({ loading, setLoading }) {
                     <Typography variant="h4">About: </Typography>
                     <Typography mb="1vh">
                       This app takes your preferences and helps you create new
-                      playlists with machine learning.
+                      playlists with a custom machine learning model.
                     </Typography>
                     <Typography mb="1vh">
                       The goal is to introduce you to new, diverse, songs in an
@@ -140,12 +140,12 @@ function Login({ loading, setLoading }) {
                   <Paper>
                     <Box p="2vw">
                       <Typography variant="h4">Features: </Typography>
-                      <Typography>Song recommendation / playback</Typography>
+                      <Typography>• Song recommendation / playback</Typography>
                       <Typography>
-                        transparent machine learning model
+                        • model weight / parameter inspection
                       </Typography>
-                      <Typography>hyperparameter tuning</Typography>
-                      <Typography>importing playlists</Typography>
+                      <Typography>• hyperparameter tuning</Typography>
+                      <Typography>• importing playlists</Typography>
                     </Box>
                   </Paper>
                 </Box>
