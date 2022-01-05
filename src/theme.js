@@ -33,7 +33,7 @@ const theme = createTheme({
       primary: "#ffffff",
       secondary: "#cbcbcb",
       disabled: "#ffffff",
-      hint: "#ffffff",
+      hint: "#cacaca",
     },
     secondary: {
       main: "#212121",

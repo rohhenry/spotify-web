@@ -1,21 +1,21 @@
 import React from "react";
-import { CircularProgress, Typography, useTheme } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { Box, Button, Paper } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 console.log(process.env.REACT_APP_BACKEND_URL);
 function Login({ loading, setLoading }) {
-  const theme = useTheme();
   return (
     <Box
       display="flex"
       flexDirection="column"
       height="100vh"
       width="100vw"
-      p={10}
+      py="8vh"
+      px="9vw"
     >
       <Box
-        pb="5vw"
+        pb="2vw"
         display="flex"
         flexDirection="column"
         justifyContent="center"
@@ -70,85 +70,102 @@ function Login({ loading, setLoading }) {
           </Typography>
         </Box>
       ) : (
-        <Box display="flex" justifyContent="space-evenly">
-          <Box display="flex" flexDirection="column">
-            <Box mb="2vh">
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Box alignSelf="center" p="5vw">
+            <Button
+              size="large"
+              variant="contained"
+              color="primary"
+              // href={`${process.env.REACT_APP_BACKEND_URL}/auth/login`}
+              onClick={(event) => {
+                setLoading(true);
+                window.location.href = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
+              }}
+            >
+              Login with Spotify to Start
+            </Button>
+          </Box>
+          <Box alignSelf="end">
+            <Box display="flex" justifyContent="space-between">
               <Paper>
-                <Typography variant="h4">Demo: </Typography>
-
-                <iframe
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                  frameborder="0"
-                  allow="autoplay; encrypted-media"
-                  allowfullscreen
-                  title="video"
-                  height="300"
-                  width="1200"
-                />
+                <Box p="2vw">
+                  <Typography variant="h4" mb="1vh">
+                    Demo:{" "}
+                  </Typography>
+                  <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    title="video"
+                    height="300"
+                    width="600"
+                  />
+                </Box>
               </Paper>
-            </Box>
-
-            <Box mb="2vh">
-              <Paper>
-                <Typography variant="h4">About: </Typography>
-                <Typography paragraph>
-                  {`
-                This app takes your preferences and helps you create new playlists with machine learning. 
-                The goal is to introduce you to new, diverse, songs. Unlike traditional
-                recommendation algorithms which relies heavily on collaborative
-                filtering, this algorithm is purely content based. You will need
-                a spotify premium account to use.
-
-                You can erase your data at anytime
-                
-                For better performance clone the repo and run this app locally`}
-                </Typography>
-              </Paper>
-            </Box>
-            <Box mb="2vh">
-              <Paper>
-                <Typography variant="h4">Features: </Typography>
-                <Typography style={{ wordWrap: "break-word" }}>
-                  song suggestions hyperparameter tuning importing / exporting
-                  playlists This is a spotify track recommendation webapp.
-                </Typography>
-              </Paper>
-            </Box>
-            <Box mb="2vh">
-              <Paper>
-                <Typography variant="h4">Tech Stack: </Typography>
-                <Typography style={{ wordWrap: "break-word" }}>
-                  Frontend: JavaScript, react, material ui github pages Backend:
-                  python, flask, heroku, google firestore Tools: sklearn, numpy,
-                  pandas, spotify api
-                </Typography>
-              </Paper>
-            </Box>
-            <Box>
-              <Paper>
-                <Typography variant="h4">
-                  Features Under Developement{" "}
-                </Typography>
-                <Typography style={{ wordWrap: "break-word" }}>
-                  importing tracks, exporting tracks, server optimizations, more
-                  hyperparameter controls, allow non-spotify users to use
-                </Typography>
-              </Paper>
+              <Box width="30%" display="flex">
+                <Paper>
+                  <Box p="2vw">
+                    <Typography variant="h4">About: </Typography>
+                    <Typography mb="1vh">
+                      This app takes your preferences and helps you create new
+                      playlists with machine learning.
+                    </Typography>
+                    <Typography mb="1vh">
+                      The goal is to introduce you to new, diverse, songs in an
+                      interactive way
+                    </Typography>
+                    <Typography mb="1vh">
+                      Unlike traditional recommendation algorithms which relies
+                      heavily on collaborative filtering, this algorithm is
+                      purely content based and all the models parameters are
+                      displayed.
+                    </Typography>
+                    <Typography mb="1vh">
+                      You will need a spotify premium account to use.{" "}
+                    </Typography>
+                    <Typography mb="1vh">
+                      For better performance clone the repo and run this app
+                      locally
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Box>
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="space-between"
+              >
+                <Box>
+                  <Paper>
+                    <Box p="2vw">
+                      <Typography variant="h4">Features: </Typography>
+                      <Typography>Song recommendation / playback</Typography>
+                      <Typography>
+                        transparent machine learning model
+                      </Typography>
+                      <Typography>hyperparameter tuning</Typography>
+                      <Typography>importing playlists</Typography>
+                    </Box>
+                  </Paper>
+                </Box>
+                <Box>
+                  <Paper>
+                    <Box p="2vw">
+                      <Typography variant="h4">Tech Stack: </Typography>
+                      <Typography>
+                        Frontend: JavaScript, react, material ui github pages
+                        <Typography>
+                          Backend: python, flask, heroku, google firestore
+                        </Typography>
+                        Tools: sklearn, numpy, pandas, spotify api
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Box>
+              </Box>
             </Box>
           </Box>
-
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            // href={`${process.env.REACT_APP_BACKEND_URL}/auth/login`}
-            onClick={(event) => {
-              setLoading(true);
-              window.location.href = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
-            }}
-          >
-            Login with Spotify
-          </Button>
         </Box>
       )}
     </Box>

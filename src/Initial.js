@@ -27,6 +27,7 @@ const SearchBox = ({ label, onClick }) => {
     setSearchString(search_string);
     setSearchResults([]);
     if (search_string === "") {
+      setValue(null);
       return;
     }
     setLoading(true);
@@ -56,7 +57,7 @@ const SearchBox = ({ label, onClick }) => {
         setOpen(false);
       }}
       loading={loading}
-      loadingText="Loading... (heroku is slow)"
+      loadingText="Loading..."
       noOptionsText="Track Not Found"
       filterOptions={(x) => x}
       autoComplete
@@ -85,7 +86,7 @@ const SearchBox = ({ label, onClick }) => {
                 {option.name}
               </Typography>
               <Typography color="text.secondary" textAlign="left">
-                {option.artists.replace(/[\[\]']/g, "")}
+                {option.artists.replace(/[[\]']/g, "")}
               </Typography>
             </Box>
           </Button>
@@ -109,7 +110,7 @@ const InitialComponent = ({ setRecommendation, userId }) => {
   const uploadTracks = async () => {
     const promises = [];
     tracks.forEach((track) => {
-      track.option &&
+      track?.option &&
         promises.push(server.update(userId, track.option.id, track.feedback));
     });
     await Promise.all(promises);
@@ -133,96 +134,128 @@ const InitialComponent = ({ setRecommendation, userId }) => {
           feed me some data to start
         </Typography>
       </Box>
-      <Box
-        width="80vw"
-        display="flex"
-        alignItems="center"
-        justifyContent="space-around"
-      >
-        <Paper>
-          <Box display="flex" flexDirection="column" p="2vw" width="30vw">
-            <Box display="flex" flexDirection="column">
-              <Typography variant="h5">
-                Search For Two Tracks You Like
-              </Typography>
-              <Box mt="2vh">
-                <SearchBox
-                  label="track 1"
-                  onClick={(option) => {
-                    tracks[0] = { option: option, feedback: 1 };
-                    setTracks([...tracks]);
-                  }}
-                />
+      {loading ? (
+        <Box
+          display="flex"
+          flexDirection="column"
+          flexGrow={1}
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
+          <CircularProgress size="5vw" />
+          <Box display="flex" height="4vh" />
+          <Typography variant="h5">Creating Model</Typography>
+          <Typography color="text.secondary"></Typography>
+        </Box>
+      ) : (
+        <Box display="flex" flexDirection="column">
+          <Box
+            width="80vw"
+            display="flex"
+            alignItems="center"
+            justifyContent="space-around"
+          >
+            <Paper>
+              <Box display="flex" flexDirection="column" p="2vw" width="30vw">
+                <Box display="flex" flexDirection="column">
+                  <Typography variant="h5">
+                    Search For Two Tracks You Like
+                  </Typography>
+                  <Box mt="2vh">
+                    <SearchBox
+                      label="track 1"
+                      onClick={(option) => {
+                        tracks[0] = { option: option, feedback: 1 };
+                        setTracks([...tracks]);
+                      }}
+                    />
+                  </Box>
+                  <Box my="2vh">
+                    <SearchBox
+                      label="track 2"
+                      onClick={(option) => {
+                        tracks[1] = { option, feedback: 1 };
+                        setTracks([...tracks]);
+                      }}
+                    />
+                  </Box>
+                </Box>
+                <Box>
+                  <Typography variant="h5">
+                    And One Track You Don't Like
+                  </Typography>
+                  <Box my="2vh">
+                    <SearchBox
+                      label="track 1"
+                      onClick={(option) => {
+                        tracks[2] = { option, feedback: -1 };
+                        setTracks([...tracks]);
+                      }}
+                    />
+                  </Box>
+                </Box>
               </Box>
-              <Box my="2vh">
-                <SearchBox
-                  label="track 2"
-                  onClick={(option) => {
-                    tracks[1] = { option, feedback: 1 };
-                    setTracks([...tracks]);
-                  }}
-                />
-              </Box>
+            </Paper>
+
+            <Box m="10vw">
+              <Typography variant="h3">or</Typography>
             </Box>
-            <Box>
-              <Typography variant="h5">And One Track You Don't</Typography>
-              <Box my="2vh">
-                <SearchBox
-                  label="track 1"
-                  onClick={(option) => {
-                    tracks[2] = { option, feedback: -1 };
-                    setTracks([...tracks]);
-                  }}
-                />
-              </Box>
+            <Box width="30vw">
+              <Playlists
+                userId={userId}
+                selectedPlaylist={selectedPlaylist}
+                setSelectedPlaylist={setSelectedPlaylist}
+              />
+              <Paper>
+                <Box p="2vw">
+                  <Typography variant="h5">
+                    And One Track You Don't Like
+                  </Typography>
+                  <Box my="2vh">
+                    <SearchBox
+                      label="track 1"
+                      onClick={(option) => {
+                        tracks[2] = { option, feedback: -1 };
+                        setTracks([...tracks]);
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Paper>
             </Box>
           </Box>
-        </Paper>
+          <Box alignSelf="center">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={async () => {
+                if (
+                  !(selectedPlaylist && tracks.length > 0) &&
+                  (tracks.some((v) => !v) || tracks.length !== 3)
+                ) {
+                  console.log("NEED TO INPUT ALL TRACKS OR USE PLAYLIST");
+                  return;
+                }
 
-        <Box m="10vw">
-          <Typography variant="h3">or</Typography>
+                setLoading(true);
+
+                await uploadTracks();
+                selectedPlaylist && (await uploadSelectedPlaylist());
+
+                const new_recommendation_data = await server.recommend(userId);
+                const new_recommendation =
+                  new_recommendation_data["recommendation"];
+                new_recommendation.weights = new_recommendation_data.weights;
+                setRecommendation(new_recommendation);
+                setLoading(false);
+              }}
+            >
+              {`Let's Go`}
+            </Button>
+          </Box>
         </Box>
-        <Box width="30vw">
-          <Playlists
-            userId={userId}
-            selectedPlaylist={selectedPlaylist}
-            setSelectedPlaylist={setSelectedPlaylist}
-          />
-        </Box>
-      </Box>
-      <Box alignSelf="center">
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Button
-            variant="contained"
-            size="large"
-            onClick={async () => {
-              if (
-                !selectedPlaylist &&
-                (tracks.some((v) => !v) || tracks.length !== 3)
-              ) {
-                console.log("NEED TO INPUT ALL TRACKS OR USE PLAYLIST");
-                return;
-              }
-
-              setLoading(true);
-
-              await uploadTracks();
-              selectedPlaylist && (await uploadSelectedPlaylist());
-
-              const new_recommendation_data = await server.recommend(userId);
-              const new_recommendation =
-                new_recommendation_data["recommendation"];
-              new_recommendation.weights = new_recommendation_data.weights;
-              setRecommendation(new_recommendation);
-              setLoading(false);
-            }}
-          >
-            {`Let's Go`}
-          </Button>
-        )}
-      </Box>
+      )}
     </Box>
   );
 };

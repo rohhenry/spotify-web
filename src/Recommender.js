@@ -1,12 +1,11 @@
 import {
   Switch,
-  TextField,
   Typography,
   Button,
   Box,
   CircularProgress,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SpotifyPlayer from "react-spotify-web-playback";
 import theme from "./theme";
 import InitialComponent from "./Initial";
@@ -17,27 +16,23 @@ function Recommender({ token, setToken, userId }) {
   const [recommendation, setRecommendation] = useState(null);
   const [addlist, setAddlist] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [play, setPlay] = useState(true);
-  const [metrics, setMetrics] = useState({ score: "-", mae: "-" });
+  const [metrics, setMetrics] = useState({ score: "-", mae: "-", n: "-" });
   const updateAndRecommend = async (feedback) => {
     if (isLoading) {
       return;
     }
     setIsLoading(true);
-    if (feedback == 1) {
+    if (feedback === 1) {
       setAddlist([...addlist, recommendation]);
     }
     await backend.update(userId, recommendation.id, feedback);
     const new_recommendation_data = await backend.recommend(userId);
-    const new_metrics = {};
-    new_metrics.score = new_recommendation_data.score;
-    new_metrics.mae = new_recommendation_data.mae;
+    const new_metrics = new_recommendation_data["metrics"];
     const new_recommendation = new_recommendation_data["recommendation"];
     new_recommendation.weights = new_recommendation_data.weights;
     setRecommendation({ ...new_recommendation });
     setMetrics(new_metrics);
     setIsLoading(false);
-    setPlay(true);
   };
   return recommendation ? (
     <Box
@@ -53,24 +48,66 @@ function Recommender({ token, setToken, userId }) {
           display="flex"
           flexDirection="column"
           bgcolor="background.default"
-          p="5vh"
+          pt="4vh"
+          px="2vw"
         >
-          <Box flexGrow={1} m="1vh">
-            <Typography variant="h5">Metrics</Typography>
-            <Typography>n: {42}</Typography>
-            <Typography>score: {metrics.score}</Typography>
-            <Typography>mae: {metrics.mae}</Typography>
-          </Box>
-          <Box borderRight={1}></Box>
-          <Box flexGrow={4} display="flex" flexDirection="column">
-            <Typography variant="h5">Controls</Typography>
-            <Box display="flex" alignItems="center">
-              <Typography variant="p">Popularity Heuristic</Typography>
-              <Switch color="primary" />
+          <Box flexGrow={1}>
+            <Box mb="2vh">
+              <Typography variant="h4">Metrics</Typography>
             </Box>
-            <Box display="flex" alignItems="center">
-              <Typography variant="p">Regularization (L2)</Typography>
-              <Switch color="primary" />
+            <Box my="2vh">
+              <Typography>n: {metrics.n}</Typography>
+            </Box>
+            <Box my="2vh">
+              <Typography>score: {metrics.score}</Typography>
+            </Box>
+            <Box my="2vh">
+              <Typography>mae: {metrics.mae}</Typography>
+            </Box>
+          </Box>
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <Box mb="2vh">
+              <Typography variant="h4">
+                Controls (under developement)
+              </Typography>
+            </Box>
+            <Box display="flex" flexDirection="column" flexGrow="1">
+              <Box display="flex" alignItems="center" my="2vh">
+                <Typography variant="p">Sampling Method: Thompson</Typography>
+              </Box>
+              <Box display="flex" alignItems="center" my="2vh">
+                <Typography variant="p">Popularity Heuristic</Typography>
+                <Switch color="primary" />
+              </Box>
+              <Box display="flex" alignItems="center" my="2vh">
+                <Typography variant="p">Regularization (L2)</Typography>
+                <Switch color="primary" />
+              </Box>
+            </Box>
+          </Box>
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <Box mb="2vh">
+              <Typography variant="h4">Info</Typography>
+            </Box>
+            <Box display="flex" flexDirection="column" flexGrow={1}>
+              <Box display="flex" alignItems="center" my="2vh">
+                <Typography variant="p">
+                  This model uses feature transformation and ridge regression to
+                  predict the outcome of a song. It then uses the chosen
+                  sampling strategy to optimally pick from the predictions.
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="center" my="2vh">
+                <Typography variant="p">
+                  If you wish to completely delete your data from the server you
+                  can click below.
+                </Typography>
+              </Box>
+              <Box flexGrow="1" justifySelf="end">
+                <Button fullWidth variant="outlined">
+                  Delete Data (Under Developement)
+                </Button>
+              </Box>
             </Box>
           </Box>
         </Box>
@@ -87,7 +124,7 @@ function Recommender({ token, setToken, userId }) {
             <CircularProgress size="5vw" justifySelf="center" />
             <Box display="flex" height="4vh" />
             <Typography variant="h5">Crunching Numbers</Typography>
-            <Typography color="text.secondary">and thinking hard</Typography>
+            <Typography color="text.secondary">beep boop</Typography>
           </Box>
         ) : (
           <Box
@@ -98,21 +135,17 @@ function Recommender({ token, setToken, userId }) {
             justifyContent="space-between"
             height="100%"
           >
-            <Box pt="4vw">
+            <Box pt="8vh">
               <Typography variant="h2" color="text.primary">
                 {recommendation.name}
               </Typography>
               <Typography variant="h4" color="text.secondary" align="center">
-                {recommendation.artists.replace(/[\[\]']/g, "")}
+                {recommendation.artists.replace(/[[\]']/g, "")}
               </Typography>
             </Box>
-            <Box display="flex" flexDirection="column">
-              <Heatmap weights={recommendation.weights} />
-              <Typography variant="h6" align="center" color="text.secondary">
-                Model Parameters
-              </Typography>
-            </Box>
-            <Box display="flex" my="2vh" width="100%">
+            <Heatmap weights={recommendation.weights} />
+
+            <Box display="flex" my="2vh" width="100%" px="2vw">
               <Box width="50%">
                 <Button
                   variant="contained"
@@ -149,13 +182,12 @@ function Recommender({ token, setToken, userId }) {
         )}
         <Addlist tracks={addlist} />
       </Box>
-      <Box>
+      <Box height="5vh" bgcolor="secondary.main">
         <SpotifyPlayer
-          key={recommendation.id}
+          key={recommendation.id + token}
           token={token}
           uris={["spotify:track:" + recommendation.id]}
           autoPlay={true}
-          play={play}
           styles={{
             activeColor: "#000",
             bgColor: theme.palette.secondary.main,
@@ -165,6 +197,7 @@ function Recommender({ token, setToken, userId }) {
             sliderHandleColor: "fff",
             sliderTrackColor: theme.palette.secondary.light,
             sliderHeight: "1vh",
+            height: "3vh",
             trackArtistColor: "#ccc",
             trackNameColor: "#fff",
             errorColor: "#f00",

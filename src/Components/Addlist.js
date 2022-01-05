@@ -20,7 +20,7 @@ const Addlist = ({ tracks }) => {
       px="2vh"
       pb="2vh"
     >
-      <Box display="flex" flexDirection="column" mb="10%">
+      <Box display="flex" flexDirection="column" mx="1vw" mb="10%">
         <Typography variant="h4">Added Tracks</Typography>
       </Box>
       <Box flexGrow={1} sx={{ maxHeight: "100%", overflow: "auto" }} mb="2vh">
