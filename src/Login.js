@@ -144,6 +144,7 @@ function Login({ loading, setLoading }) {
                       <Typography variant="h4" mb="2vh">
                         Features:{" "}
                       </Typography>
+                      <Typography>• Spotify integration</Typography>
                       <Typography>• Song recommendation / playback</Typography>
                       <Typography>
                         • model weight / parameter inspection
