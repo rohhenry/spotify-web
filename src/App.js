@@ -12,7 +12,7 @@ function App() {
   const [token, setToken] = useState("");
   const queryParams = new URLSearchParams(window.location.search);
   const uid = queryParams.get("userId");
-  const [userId, _] = useState(uid);
+  const [userId, setUserId] = useState(uid);
   const [loading, setLoading] = useState(false);
 
   console.log("userId: ", userId);
@@ -34,7 +34,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {!token ? (
-        <Login loading={loading} setLoading={setLoading} />
+        <Login
+          loading={loading}
+          setLoading={setLoading}
+          setUserId={setUserId}
+        />
       ) : (
         <Recommender userId={userId} token={token} setToken={setToken} />
       )}

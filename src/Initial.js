@@ -170,65 +170,75 @@ const InitialComponent = ({ setRecommendation, userId }) => {
             justifyContent="center"
           >
             {choice === "manual" && (
-              <Paper>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  pt="4vh"
-                  pb="1vh"
-                  px="2vw"
-                >
-                  <Box display="flex" flexDirection="column">
-                    <Typography variant="h5">
-                      Search For Two Tracks You Like
-                    </Typography>
-                    <Box mt="2vh">
-                      <SearchBox
-                        label="track 1"
-                        onClick={(option) => {
-                          tracks[0] = { option: option, feedback: 1 };
-                          setTracks([...tracks]);
-                        }}
-                      />
+              <Box>
+                <BackButton
+                  onClick={() => {
+                    setChoice(null);
+                    setErrorText("");
+                    setTracks([]);
+                    setSelectedPlaylist(null);
+                  }}
+                />
+                <Paper>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    pt="4vh"
+                    pb="1vh"
+                    px="2vw"
+                  >
+                    <Box display="flex" flexDirection="column">
+                      <Typography variant="h5">
+                        Search For Two Tracks You Like
+                      </Typography>
+                      <Box mt="2vh">
+                        <SearchBox
+                          label="track 1"
+                          onClick={(option) => {
+                            tracks[0] = { option: option, feedback: 1 };
+                            setTracks([...tracks]);
+                          }}
+                        />
+                      </Box>
+                      <Box my="2vh">
+                        <SearchBox
+                          label="track 2"
+                          onClick={(option) => {
+                            tracks[1] = { option, feedback: 1 };
+                            setTracks([...tracks]);
+                          }}
+                        />
+                      </Box>
                     </Box>
-                    <Box my="2vh">
-                      <SearchBox
-                        label="track 2"
-                        onClick={(option) => {
-                          tracks[1] = { option, feedback: 1 };
-                          setTracks([...tracks]);
-                        }}
-                      />
+                    <Box>
+                      <Typography variant="h5">
+                        And One Track You Don't Like
+                      </Typography>
+                      <Box my="2vh">
+                        <SearchBox
+                          label="track 1"
+                          onClick={(option) => {
+                            tracks[2] = { option, feedback: -1 };
+                            setTracks([...tracks]);
+                          }}
+                        />
+                      </Box>
                     </Box>
                   </Box>
-                  <Box>
-                    <Typography variant="h5">
-                      And One Track You Don't Like
-                    </Typography>
-                    <Box my="2vh">
-                      <SearchBox
-                        label="track 1"
-                        onClick={(option) => {
-                          tracks[2] = { option, feedback: -1 };
-                          setTracks([...tracks]);
-                        }}
-                      />
-                    </Box>
-                  </Box>
-                  <BackButton
-                    onClick={() => {
-                      setChoice(null);
-                      setErrorText("");
-                      setTracks([]);
-                      setSelectedPlaylist(null);
-                    }}
-                  />
-                </Box>
-              </Paper>
+                </Paper>
+              </Box>
             )}
 
             {choice === "import" && (
               <Box width="30vw">
+                <BackButton
+                  onClick={() => {
+                    setChoice(null);
+                    setErrorText("");
+                    setTracks([]);
+                    setSelectedPlaylist(null);
+                  }}
+                />
                 <Playlists
                   userId={userId}
                   selectedPlaylist={selectedPlaylist}
@@ -248,14 +258,6 @@ const InitialComponent = ({ setRecommendation, userId }) => {
                         }}
                       />
                     </Box>
-                    <BackButton
-                      onClick={() => {
-                        setChoice(null);
-                        setErrorText("");
-                        setTracks([]);
-                        setSelectedPlaylist(null);
-                      }}
-                    />
                   </Box>
                 </Paper>
               </Box>

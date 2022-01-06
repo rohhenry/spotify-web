@@ -4,7 +4,7 @@ import { Box, Button, Paper } from "@mui/material";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 console.log(process.env.REACT_APP_BACKEND_URL);
-function Login({ loading, setLoading }) {
+function Login({ loading, setLoading, setUserId }) {
   return (
     <Box
       display="flex"
@@ -79,10 +79,11 @@ function Login({ loading, setLoading }) {
               // href={`${process.env.REACT_APP_BACKEND_URL}/auth/login`}
               onClick={(event) => {
                 setLoading(true);
-                window.location.href = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
+                setUserId("12175261097");
+                // window.location.href = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
               }}
             >
-              Login with Spotify to Start
+              Login with this Demo Spotify Account to Start
             </Button>
           </Box>
           <Box alignSelf="end">
