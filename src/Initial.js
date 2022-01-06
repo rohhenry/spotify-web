@@ -8,9 +8,10 @@ import {
   Autocomplete,
   CircularProgress,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import server from "./server";
 import spotifyApi from "./spotify";
-
 import { debounce } from "lodash";
 import { Playlists } from "./Components";
 
@@ -96,10 +97,22 @@ const SearchBox = ({ label, onClick }) => {
   );
 };
 
+const BackButton = ({ onClick }) => {
+  return (
+    <Box py="1vh">
+      <Button fullWidth variant="contained" onClick={onClick}>
+        <ArrowBackIcon />
+      </Button>
+    </Box>
+  );
+};
+
 const InitialComponent = ({ setRecommendation, userId }) => {
   const [tracks, setTracks] = useState([]);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState(false);
+  const [choice, setChoice] = useState(null);
 
   const uploadSelectedPlaylist = async () => {
     const data = await spotifyApi.getPlaylist(selectedPlaylist.id);
@@ -151,108 +164,175 @@ const InitialComponent = ({ setRecommendation, userId }) => {
       ) : (
         <Box display="flex" flexDirection="column">
           <Box
-            width="80vw"
+            width="100vw"
             display="flex"
             alignItems="center"
-            justifyContent="space-around"
+            justifyContent="center"
           >
-            <Paper>
-              <Box display="flex" flexDirection="column" p="2vw" width="30vw">
-                <Box display="flex" flexDirection="column">
-                  <Typography variant="h5">
-                    Search For Two Tracks You Like
-                  </Typography>
-                  <Box mt="2vh">
-                    <SearchBox
-                      label="track 1"
-                      onClick={(option) => {
-                        tracks[0] = { option: option, feedback: 1 };
-                        setTracks([...tracks]);
-                      }}
-                    />
-                  </Box>
-                  <Box my="2vh">
-                    <SearchBox
-                      label="track 2"
-                      onClick={(option) => {
-                        tracks[1] = { option, feedback: 1 };
-                        setTracks([...tracks]);
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography variant="h5">
-                    And One Track You Don't Like
-                  </Typography>
-                  <Box my="2vh">
-                    <SearchBox
-                      label="track 1"
-                      onClick={(option) => {
-                        tracks[2] = { option, feedback: -1 };
-                        setTracks([...tracks]);
-                      }}
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </Paper>
-
-            <Box m="10vw">
-              <Typography variant="h3">or</Typography>
-            </Box>
-            <Box width="30vw">
-              <Playlists
-                userId={userId}
-                selectedPlaylist={selectedPlaylist}
-                setSelectedPlaylist={setSelectedPlaylist}
-              />
+            {choice === "manual" && (
               <Paper>
-                <Box p="2vw">
-                  <Typography variant="h5">
-                    And One Track You Don't Like
-                  </Typography>
-                  <Box my="2vh">
-                    <SearchBox
-                      label="track 1"
-                      onClick={(option) => {
-                        tracks[2] = { option, feedback: -1 };
-                        setTracks([...tracks]);
-                      }}
-                    />
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  pt="4vh"
+                  pb="1vh"
+                  px="2vw"
+                >
+                  <Box display="flex" flexDirection="column">
+                    <Typography variant="h5">
+                      Search For Two Tracks You Like
+                    </Typography>
+                    <Box mt="2vh">
+                      <SearchBox
+                        label="track 1"
+                        onClick={(option) => {
+                          tracks[0] = { option: option, feedback: 1 };
+                          setTracks([...tracks]);
+                        }}
+                      />
+                    </Box>
+                    <Box my="2vh">
+                      <SearchBox
+                        label="track 2"
+                        onClick={(option) => {
+                          tracks[1] = { option, feedback: 1 };
+                          setTracks([...tracks]);
+                        }}
+                      />
+                    </Box>
                   </Box>
+                  <Box>
+                    <Typography variant="h5">
+                      And One Track You Don't Like
+                    </Typography>
+                    <Box my="2vh">
+                      <SearchBox
+                        label="track 1"
+                        onClick={(option) => {
+                          tracks[2] = { option, feedback: -1 };
+                          setTracks([...tracks]);
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <BackButton
+                    onClick={() => {
+                      setChoice(null);
+                      setErrorText("");
+                      setTracks([]);
+                      setSelectedPlaylist(null);
+                    }}
+                  />
                 </Box>
               </Paper>
+            )}
+
+            {choice === "import" && (
+              <Box width="30vw">
+                <Playlists
+                  userId={userId}
+                  selectedPlaylist={selectedPlaylist}
+                  setSelectedPlaylist={setSelectedPlaylist}
+                />
+                <Paper>
+                  <Box pb="1vh" px="2vw">
+                    <Typography variant="h5">
+                      And One Track You Don't Like
+                    </Typography>
+                    <Box my="2vh">
+                      <SearchBox
+                        label="track 1"
+                        onClick={(option) => {
+                          tracks[0] = { option, feedback: -1 };
+                          setTracks([...tracks]);
+                        }}
+                      />
+                    </Box>
+                    <BackButton
+                      onClick={() => {
+                        setChoice(null);
+                        setErrorText("");
+                        setTracks([]);
+                        setSelectedPlaylist(null);
+                      }}
+                    />
+                  </Box>
+                </Paper>
+              </Box>
+            )}
+
+            {!choice && (
+              <Box display="flex" alignItems="center">
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => {
+                    setChoice("manual");
+                    setErrorText("");
+                  }}
+                >
+                  Manual Search And Add
+                </Button>
+                <Box m="2vw">
+                  <Typography variant="h4">or</Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={() => {
+                    setChoice("import");
+                    setErrorText("");
+                  }}
+                >
+                  Import a Playlist From Spotify
+                </Button>
+              </Box>
+            )}
+
+            <Box m="2vw">
+              <ArrowForwardIcon size="large" />
             </Box>
-          </Box>
-          <Box alignSelf="center">
-            <Button
-              variant="contained"
-              size="large"
-              onClick={async () => {
-                if (
-                  !(selectedPlaylist && tracks.length > 0) &&
-                  (tracks.some((v) => !v) || tracks.length !== 3)
-                ) {
-                  console.log("NEED TO INPUT ALL TRACKS OR USE PLAYLIST");
-                  return;
-                }
+            <Box alignSelf="center">
+              <Button
+                variant="contained"
+                size="large"
+                onClick={async () => {
+                  if (!choice) {
+                    setErrorText("Select a choice first");
+                    return;
+                  }
+                  if (choice === "manual") {
+                    if (tracks.length !== 3) {
+                      setErrorText("Click me after adding all 3 tracks");
+                      return;
+                    }
+                    setLoading(true);
+                    await uploadTracks();
+                  }
+                  if (choice === "import") {
+                    if (!selectedPlaylist || tracks.length !== 1) {
+                      setErrorText(
+                        "Click me after a playlist and a track you dislike are set"
+                      );
+                      return;
+                    }
+                    setLoading(true);
+                    await uploadSelectedPlaylist();
+                  }
 
-                setLoading(true);
-
-                await uploadTracks();
-                selectedPlaylist && (await uploadSelectedPlaylist());
-
-                const new_recommendation_data = await server.recommend(userId);
-                const new_recommendation =
-                  new_recommendation_data["recommendation"];
-                new_recommendation.weights = new_recommendation_data.weights;
-                setRecommendation(new_recommendation);
-                setLoading(false);
-              }}
-            >
-              {`Let's Go`}
-            </Button>
+                  const new_recommendation_data = await server.recommend(
+                    userId
+                  );
+                  const new_recommendation =
+                    new_recommendation_data["recommendation"];
+                  new_recommendation.weights = new_recommendation_data.weights;
+                  setRecommendation(new_recommendation);
+                  setLoading(false);
+                }}
+              >
+                {errorText || `Let's Go`}
+              </Button>
+            </Box>
           </Box>
         </Box>
       )}

@@ -42,7 +42,7 @@ function Recommender({ token, setToken, userId }) {
       justifyContent="space-between"
       bgcolor="secondary.dark"
     >
-      <Box flex display="flex" alignItems="stretch" height="100%">
+      <Box flex display="flex" alignItems="stretch" flexGrow={1}>
         <Box
           width="20%"
           display="flex"
@@ -90,15 +90,20 @@ function Recommender({ token, setToken, userId }) {
               <Typography variant="h4">Info</Typography>
             </Box>
             <Box display="flex" flexDirection="column" flexGrow={1}>
-              <Box display="flex" alignItems="center" my="2vh">
-                <Typography variant="p">
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                my="2vh"
+              >
+                <Typography variant="body2">
                   This model uses feature transformation and ridge regression to
                   predict the outcome of a song. It then uses the chosen
                   sampling strategy to optimally pick from the predictions.
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" my="2vh">
-                <Typography variant="p">
+                <Typography variant="body2">
                   If you wish to completely delete your data from the server you
                   can click below.
                 </Typography>
@@ -121,7 +126,7 @@ function Recommender({ token, setToken, userId }) {
             justifyContent="center"
             height="100%"
           >
-            <CircularProgress size="5vw" justifySelf="center" />
+            <CircularProgress size="5vw" />
             <Box display="flex" height="4vh" />
             <Typography variant="h5">Crunching Numbers</Typography>
             <Typography color="text.secondary">beep boop</Typography>
@@ -133,7 +138,6 @@ function Recommender({ token, setToken, userId }) {
             flexGrow={1}
             alignItems="center"
             justifyContent="space-between"
-            height="100%"
           >
             <Box pt="8vh">
               <Typography variant="h2" color="text.primary">
@@ -155,7 +159,6 @@ function Recommender({ token, setToken, userId }) {
                   display="flex"
                   alignItems={"center"}
                   justifyContent={"center"}
-                  flexGrow={1}
                   onClick={() => updateAndRecommend(1)}
                 >
                   <Typography variant="h3">Add</Typography>

@@ -62,11 +62,11 @@ function Login({ loading, setLoading }) {
           justifyContent="center"
           height="100%"
         >
-          <CircularProgress size="5vw" justifySelf="center" />
+          <CircularProgress size="5vw" />
           <Box display="flex" height="4vh" />
           <Typography variant="h5">Logging In</Typography>
           <Typography color="text.secondary">
-            Heroku containers may take up to 10 seconds to wake up
+            Heroku containers may take up to 30 seconds to wake up
           </Typography>
         </Box>
       ) : (

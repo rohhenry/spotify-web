@@ -97,9 +97,10 @@ const Heatmap = ({ weights }) => {
         <Box display="flex">
           {[...Array(width).keys()].map((x) => {
             return (
-              <Box mx={`${space / 2}rem`}>
+              <Box key={x} mx={`${space / 2}rem`}>
                 {[...Array(height).keys()].map((y) => (
                   <Square
+                    key={y}
                     heat={posToHeat(x, y)}
                     scalingFunction={scalingFunction}
                     space={space}
@@ -116,6 +117,7 @@ const Heatmap = ({ weights }) => {
           {[...Array(height).keys()].map((x) => (
             <Box>
               <Square
+                key={x}
                 heat={weights[1 + x]}
                 scalingFunction={scalingFunction}
                 space={space / 2}

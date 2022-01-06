@@ -40,6 +40,15 @@ const theme = createTheme({
       light: "#535353",
       dark: "#121212",
     },
+
+    tertiary: {
+      main: "#fff",
+    },
+
+    // action: {
+    //   disabledBackground: "#535353",
+    //   disabled: "#535353",
+    // },
   },
   components: {
     // Name of the component
