@@ -89,8 +89,8 @@ function Login({ loading, setLoading }) {
             <Box display="flex" justifyContent="space-between">
               <Paper>
                 <Box p="2vw">
-                  <Typography variant="h4" mb="1vh">
-                    Demo:{" "}
+                  <Typography variant="h4" mb="2vh">
+                    Demo:
                   </Typography>
                   <iframe
                     src="https://www.youtube.com/embed/dQw4w9WgXcQ"
@@ -106,7 +106,9 @@ function Login({ loading, setLoading }) {
               <Box width="30%" display="flex">
                 <Paper>
                   <Box p="2vw">
-                    <Typography variant="h4">About: </Typography>
+                    <Typography variant="h4" mb="2vh">
+                      About:
+                    </Typography>
                     <Typography mb="1vh">
                       This app takes your preferences and helps you create new
                       playlists with a custom machine learning model.
@@ -139,7 +141,9 @@ function Login({ loading, setLoading }) {
                 <Box>
                   <Paper>
                     <Box p="2vw">
-                      <Typography variant="h4">Features: </Typography>
+                      <Typography variant="h4" mb="2vh">
+                        Features:{" "}
+                      </Typography>
                       <Typography>• Song recommendation / playback</Typography>
                       <Typography>
                         • model weight / parameter inspection
@@ -149,10 +153,12 @@ function Login({ loading, setLoading }) {
                     </Box>
                   </Paper>
                 </Box>
-                <Box>
+                <Box mt="3vh">
                   <Paper>
                     <Box p="2vw">
-                      <Typography variant="h4">Tech Stack: </Typography>
+                      <Typography variant="h4" mb="2vh">
+                        Tech Stack:
+                      </Typography>
                       <Typography>
                         Frontend: JavaScript, react, material ui github pages
                         <Typography>
