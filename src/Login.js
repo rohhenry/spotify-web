@@ -22,7 +22,7 @@ function Login({ loading, setLoading, setUserId }) {
       >
         <Box>
           <Typography variant="h3" align="center">
-            Spotify Track Recommender
+            Spotify Track Tour
           </Typography>
         </Box>
         <Box
@@ -71,7 +71,14 @@ function Login({ loading, setLoading, setUserId }) {
         </Box>
       ) : (
         <Box display="flex" flexDirection="column" alignItems="center">
-          <Box alignSelf="center" p="5vw">
+          <Typography color="text.secondary">
+            Awaiting Spotify public app approval for logging into your own
+            account.
+          </Typography>
+          <Typography color="text.secondary">
+            For now please use this demo account to explore
+          </Typography>
+          <Box alignSelf="center" pt="2vh" pb="5vh">
             <Button
               size="large"
               variant="contained"
@@ -83,14 +90,14 @@ function Login({ loading, setLoading, setUserId }) {
                 // window.location.href = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
               }}
             >
-              Login with this Demo Spotify Account to Start
+              Login In Using Demo Spotify Account
             </Button>
           </Box>
           <Box alignSelf="end">
             <Box display="flex" justifyContent="space-between">
               <Paper>
                 <Box p="2vw">
-                  <Typography variant="h4" mb="2vh">
+                  <Typography variant="h5" mb="2vh">
                     Demo:
                   </Typography>
                   <iframe
@@ -107,65 +114,71 @@ function Login({ loading, setLoading, setUserId }) {
               <Box width="30%" display="flex">
                 <Paper>
                   <Box p="2vw">
-                    <Typography variant="h4" mb="2vh">
+                    <Typography variant="h5" mb="2vh">
                       About:
                     </Typography>
-                    <Typography mb="1vh">
+                    <Typography mb="1vh" color="text.secondary">
                       This app takes your preferences and helps you create new
                       playlists with a custom machine learning model.
                     </Typography>
-                    <Typography mb="1vh">
+                    <Typography mb="1vh" color="text.secondary">
                       The goal is to introduce you to new, diverse, songs in an
                       interactive way
                     </Typography>
-                    <Typography mb="1vh">
+                    <Typography mb="1vh" color="text.secondary">
                       Unlike traditional recommendation algorithms which relies
                       heavily on collaborative filtering, this algorithm is
                       purely content based and all the models parameters are
                       displayed.
                     </Typography>
-                    <Typography mb="1vh">
+                    <Typography mb="1vh" color="text.secondary">
                       You will need a spotify premium account to use.{" "}
                     </Typography>
-                    <Typography mb="1vh">
+                    <Typography mb="1vh" color="text.secondary">
                       For better performance clone the repo and run this app
                       locally
                     </Typography>
                   </Box>
                 </Paper>
               </Box>
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="space-between"
-              >
-                <Box>
+              <Box display="flex" flexDirection="column">
+                <Box flexGrow={1}>
                   <Paper>
                     <Box p="2vw">
-                      <Typography variant="h4" mb="2vh">
+                      <Typography variant="h5" mb="2vh">
                         Features:{" "}
                       </Typography>
-                      <Typography>• Spotify integration</Typography>
-                      <Typography>• Song recommendation / playback</Typography>
-                      <Typography>
+                      <Typography color="text.secondary">
+                        • Spotify integration
+                      </Typography>
+                      <Typography color="text.secondary">
+                        • Song recommendation / playback
+                      </Typography>
+                      <Typography color="text.secondary">
                         • model weight / parameter inspection
                       </Typography>
-                      <Typography>• hyperparameter tuning</Typography>
-                      <Typography>• importing playlists</Typography>
+                      <Typography color="text.secondary">
+                        • hyperparameter tuning
+                      </Typography>
+                      <Typography color="text.secondary">
+                        • importing playlists
+                      </Typography>
                     </Box>
                   </Paper>
                 </Box>
-                <Box mt="3vh">
+                <Box flexGrow={1} mt="3vh">
                   <Paper>
                     <Box p="2vw">
-                      <Typography variant="h4" mb="2vh">
+                      <Typography variant="h5" mb="2vh">
                         Tech Stack:
                       </Typography>
-                      <Typography>
+                      <Typography color="text.secondary">
                         Frontend: JavaScript, react, material ui github pages
-                        <Typography>
-                          Backend: python, flask, heroku, google firestore
-                        </Typography>
+                      </Typography>
+                      <Typography color="text.secondary">
+                        Backend: python, flask, heroku, google firestore
+                      </Typography>
+                      <Typography color="text.secondary">
                         Tools: sklearn, numpy, pandas, spotify api
                       </Typography>
                     </Box>
