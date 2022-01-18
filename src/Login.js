@@ -22,7 +22,7 @@ function Login({ loading, setLoading, setUserId }) {
       >
         <Box>
           <Typography variant="h3" align="center">
-            Spotify Track Tour
+            Track Tour
           </Typography>
         </Box>
         <Box
